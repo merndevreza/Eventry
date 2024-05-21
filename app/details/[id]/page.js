@@ -1,11 +1,13 @@
 import DetailsBody from "@/components/Details/DetailsBody";
 import DetailsHero from "@/components/Details/DetailsHero";
+import { getEventById } from "@/db/queries";
 
-const detailsPage = () => {
+const detailsPage = async({params:{id}}) => {
+   const event=await getEventById(id) 
    return (
       <main>
-         <DetailsHero/>
-         <DetailsBody/>
+         <DetailsHero event={event}/>
+         <DetailsBody event={event}/>
       </main>
    );
 };
