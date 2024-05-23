@@ -1,15 +1,51 @@
-import Link from "next/link";
+"use client";
+import { addInterestedEvent } from "@/actions";
+import useAuth from "@/app/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 
-const ActionButtons = ({ alignRight }) => {
+const ActionButtons = ({ eventId, interested_ids, alignRight }) => {
+  const router = useRouter();
+  const { auth } = useAuth();
+  const [isPending, startTransition] = useTransition();
+
+  const isInterested = interested_ids.find((id) => id === auth?.id);
+  const [interested, setInterested] = useState(isInterested);
+
+  const handleToggleInterest = async () => {
+    if (auth) {
+      await addInterestedEvent(eventId, auth?.id);
+      setInterested(!interested);
+    } else {
+      router.push("/login");
+    }
+  };
+
+  const handleGoing = () => {
+    if (auth) {
+      router.push("/payment");
+    } else {
+      router.push("/login");
+    }
+  };
   return (
     <div className={`w-full flex gap-4 mt-4 ${alignRight && "flex-1"}`}>
-      <button className="w-full bg-indigo-600 hover:bg-indigo-800">
-        Interested
+      <button
+        onClick={() =>
+          startTransition(() => {
+            handleToggleInterest();
+          })
+        }
+        className={`w-full ${
+          interested && "bg-indigo-600 hover:bg-indigo-800"
+        }`}
+      >
+        {isPending ? "Loading..." : "Interested"}
       </button>
 
-      <Link href="/payment" className=" py-2 px-2 rounded-md border border-[#5F5F5F]/50 bg-green-600 hover:bg-green-700 w-full inline-block text-center">
+      <button onClick={handleGoing} className="w-full">
         Going
-      </Link>
+      </button>
     </div>
   );
 };

@@ -7,10 +7,12 @@ import { useRouter } from "next/navigation";
 const SignInOut = () => {
   const { auth, setAuth } = useAuth();
   const router = useRouter();
+
   const handleSignOut = () => {
     setAuth(null);
     router.push("/login");
   };
+  
   return (
     <>
       {auth ? (

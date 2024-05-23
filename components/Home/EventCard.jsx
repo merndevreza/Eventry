@@ -19,7 +19,10 @@ const EventCard = ({ event }) => {
           {event?.name}
         </Link>
         <EventSummary event={event} />
-        <ActionButtons />
+        <ActionButtons
+          eventId={event?.id}
+          interested_ids={event?.interested_ids}
+        />
       </div>
     </div>
   );

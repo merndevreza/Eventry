@@ -21,7 +21,11 @@ const DetailsHero = ({ event }) => {
           <EventSummary event={event} />
         </div>
 
-        <ActionButtons alignRight={true} />
+        <ActionButtons
+          eventId={event?.id}
+          interested_ids={event?.interested_ids}
+          alignRight={true}
+        />
       </div>
     </section>
   );
