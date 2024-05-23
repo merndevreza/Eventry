@@ -4,12 +4,13 @@ import useAuth from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
-const ActionButtons = ({ eventId, interested_ids, alignRight }) => {
+const ActionButtons = ({ eventId, interested_ids, going_ids, alignRight }) => {
   const router = useRouter();
   const { auth } = useAuth();
   const [isPending, startTransition] = useTransition();
 
   const isInterested = interested_ids.find((id) => id === auth?.id);
+  const isGoing = going_ids.find((id) => id === auth?.id);
   const [interested, setInterested] = useState(isInterested);
 
   const handleToggleInterest = async () => {
@@ -23,7 +24,7 @@ const ActionButtons = ({ eventId, interested_ids, alignRight }) => {
 
   const handleGoing = () => {
     if (auth) {
-      router.push("/payment");
+      router.push(`/payment/${eventId}` );
     } else {
       router.push("/login");
     }
@@ -43,7 +44,11 @@ const ActionButtons = ({ eventId, interested_ids, alignRight }) => {
         {isPending ? "Loading..." : "Interested"}
       </button>
 
-      <button onClick={handleGoing} className="w-full">
+      <button
+        disabled={auth && isGoing}
+        onClick={handleGoing}
+        className="w-full"
+      >
         Going
       </button>
     </div>
